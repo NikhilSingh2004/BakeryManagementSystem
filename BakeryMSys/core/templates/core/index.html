@@ -133,23 +133,16 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="{% url 'add' %}">
+                    <form method="POST" action="{% url 'add' %}" novalidate>
                         {% csrf_token %}
                         <div class="input-group mb-3">
                             {{addForm.customer_name}}
-                            {% comment %} <input type="text" class="form-control" name="customer_name" placeholder="Customer Name"
-                                aria-label="Customer_Name" aria-describedby="basic-addon1"> {% endcomment %}
-                            
                         </div>
                         <div class="input-group mb-3">
                             {{addForm.order_name}}
-                            {% comment %} <input type="text" class="form-control" name="order_name" placeholder="Order Name">  {% endcomment %}
-                            <!-- aria-label="Order_Name" aria-describedby="basic-addon1" -->
                         </div>
                         <div class="input-group mb-3">
                             {{addForm.order_quantity}}
-                            {% comment %} <input type="text" class="form-control" name="quantity" placeholder="Order Quantity"
-                                aria-label="Order Quantity" aria-describedby="basic-addon1"> {% endcomment %}
                         </div>
                         <button type="submit" class="btn btn-success">Add Order</button>
                     </form>
@@ -169,27 +162,19 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{% url 'update' %}">
+                    <form method="post" action="{% url 'update' %}" novalidate>
                         {% csrf_token %}
                         <div class="input-group mb-3">
                             {{updateForm.order_id}}
-                            {% comment %} <input type="text" class="form-control" name="id" placeholder="Enter Order ID"
-                                aria-label="Order_ID" aria-describedby="basic-addon1"> {% endcomment %}
                         </div>
                         <div class="input-group mb-3">
                             {{updateForm.customer_name}}
-                            {% comment %} <input type="text" class="form-control" name="customer_name" placeholder="Customer Name"
-                                aria-label="Customer_name" aria-describedby="basic-addon1"> {% endcomment %}
                         </div>
                         <div class="input-group mb-3">
                             {{updateForm.order_name}}
-                            {% comment %} <input type="text" class="form-control" name="order_name" placeholder="Order Name"
-                                aria-label="Order_Name" aria-describedby="basic-addon1"> {% endcomment %}
                         </div>
                         <div class="input-group mb-3">
                             {{updateForm.order_quantity}}
-                            {% comment %} <input type="text" class="form-control" name="quantity" placeholder="Order Quantity"
-                                aria-label="Order Quantity" aria-describedby="basic-addon1"> {% endcomment %}
                         </div>
                         <button type="submit" class="btn btn-success">Update Order</button>
                     </form>
@@ -199,7 +184,7 @@
     </div>
 
     <!-- Find Order Model -->
-    <div class="modal" id="Find" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
+    <div class="modal" id="Find" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true" >
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -209,12 +194,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{% url 'search' %}">
+                    <form method="post" action="{% url 'search' %}" novalidate>
                         {% csrf_token %}
                         <div class="input-group mb-3">
                             {{findForm.order_id}}
-                            {% comment %} <input type="text" class="form-control" name="id" placeholder="Enter Order ID"
-                                aria-label="Customer_Name" aria-describedby="basic-addon1"> {% endcomment %}
                         </div>
                         <button type="submit" class="btn btn-success">Find</button>
                     </form>

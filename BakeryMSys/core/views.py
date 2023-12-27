@@ -5,9 +5,12 @@ from core.forms import AddOrder, UpdateOrder, FindOrder, LogIn
 import datetime
 
 def logIn(request):
+
     log = LogIn()
+
     if request.method == "POST":
         try:
+
             logData = LogIn(request.POST)
 
             if logData.is_valid():
@@ -26,6 +29,8 @@ def logIn(request):
                     return render(request, 'core/LogIn.html', {'logForm' : log, 'ErrorMessage' : 'User Not Found!'})
 
                 return render(request, 'core/LogIn.html', {'logForm' : log, 'ErrorMessage' : 'Please Enter All Data!'})
+            
+            return render(request, 'core/LogIn.html', {'logForm' : log, 'ErrorMessage' : 'Invalid Data!'})
 
         except Exception as e :
             print(e.__str__())
@@ -34,6 +39,7 @@ def logIn(request):
         return render(request, 'core/LogIn.html', {'logForm' : log, 'ErrorMessage' : ''})
 
 def home(request):
+
     aOrder = AddOrder()
     updateOrder = UpdateOrder()
     findOrder = FindOrder()
@@ -44,16 +50,18 @@ def home(request):
 
 def addOrder(request):
 
+    orders = Order.objects.all()
+
     aOrder = AddOrder()
     updateOrder = UpdateOrder()
     findOrder = FindOrder()
 
     if(request.method == "POST"):
         try:
-            addOrder = AddOrder(request.POST)
-            if  addOrder.is_valid():
 
-                orders = Order.objects.all()
+            addOrder = AddOrder(request.POST)
+
+            if  addOrder.is_valid():
                 
                 cust_name = addOrder.cleaned_data['customer_name']
                 order_name = addOrder.cleaned_data['order_name']
@@ -69,15 +77,16 @@ def addOrder(request):
 
                 new_order.save()
 
-
-            return render(request, 'core/index.html' , {'status' : True, 'added' : True, 'orders': orders, 'addForm' : aOrder, 'updateForm' : updateOrder, 'findForm' : findOrder}) 
+                return render(request, 'core/index.html' , {'status' : True, 'added' : True, 'orders': orders, 'addForm' : aOrder, 'updateForm' : updateOrder, 'findForm' : findOrder}) 
+        
+            return render(request, 'core/index.html' , {'status' : False, 'added' : False, 'orders': orders, 'addForm' : aOrder, 'updateForm' : updateOrder, 'findForm' : findOrder}) 
         
         except Exception as e :
             print(e.__str__())
 
-            return render(request, 'core/index.html', {'status' : False, 'addForm' : aOrder, 'updateForm' : updateOrder, 'findForm' : findOrder})
+            return render(request, 'core/index.html', {'status' : False, 'orders': orders,  'addForm' : aOrder, 'updateForm' : updateOrder, 'findForm' : findOrder})
     else:
-        return render(request, 'core/index.html', {'status': False, 'addForm' : aOrder, 'updateForm' : updateOrder, 'findForm' : findOrder})
+        return render(request, 'core/index.html', {'status': False, 'orders': orders, 'addForm' : aOrder, 'updateForm' : updateOrder, 'findForm' : findOrder})
 
 def findOrder(request):
 
@@ -98,14 +107,16 @@ def findOrder(request):
                 if(orders):
                     return render(request, 'core/index.html', {'orders' : orders, 'status' : True, 'addForm' : aOrder, 'updateForm' : updateOrder, 'findForm' : findOrder})
                 
-                return render(request, 'core/index.html', {'status' : False, 'notFound' : True, 'addForm' : aOrder, 'updateForm' : updateOrder, 'findForm' : findOrder})
+                return render(request, 'core/index.html', {'orders' : orders, 'status' : False, 'notFound' : True, 'addForm' : aOrder, 'updateForm' : updateOrder, 'findForm' : findOrder})
             
+            return render(request, 'core/index.html', {'orders' : orders, 'status' : False, 'notFound' : True, 'addForm' : aOrder, 'updateForm' : updateOrder, 'findForm' : findOrder})
+
         except Exception as e :
             print(e.__str__())
 
-            return render(request, 'core/index.html', {'status' : False, 'addForm' : aOrder, 'updateForm' : updateOrder, 'findForm' : findOrder})
+            return render(request, 'core/index.html', {'orders' : orders, 'status' : False, 'addForm' : aOrder, 'updateForm' : updateOrder, 'findForm' : findOrder})
     else:
-        return render(request, 'core/index.html', {'status': False, 'addForm' : aOrder, 'updateForm' : updateOrder, 'findForm' : findOrder})
+        return render(request, 'core/index.html', {'orders' : orders, 'status': False, 'addForm' : aOrder, 'updateForm' : updateOrder, 'findForm' : findOrder})
 
 def updateOrder(request):
             
@@ -126,10 +137,13 @@ def updateOrder(request):
                 order = Order.objects.get(id=id)
 
                 if order:
+
                     if(uOrder.cleaned_data['customer_name']):
                         order.customer_name = uOrder.cleaned_data['customer_name']
+
                     if(uOrder.cleaned_data['order_name']):
                         order.order_name = uOrder.cleaned_data['order_name']
+                        
                     if(uOrder.cleaned_data['order_quantity']):
                         order.order_quantity = uOrder.cleaned_data['order_quantity']
 
@@ -138,7 +152,7 @@ def updateOrder(request):
                     return render(request, 'core/index.html', {'update' : True, 'status': True, 'orders': orders, 'addForm' : aOrder, 'updateForm' : updateOrder, 'findForm' : findOrder})
                 
                 return render(request, 'core/index.html', {'update' : False, 'orders': orders, 'status': False, 'orders': orders, 'addForm' : aOrder, 'updateForm' : updateOrder, 'findForm' : findOrder})
-                
+
             return render(request, 'core/index.html', {'update' : False, 'orders': orders, 'status': False, 'orders': orders, 'addForm' : aOrder, 'updateForm' : updateOrder, 'findForm' : findOrder})    
             
         except Exception as e :
