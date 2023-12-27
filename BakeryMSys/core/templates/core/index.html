@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock title %}
+
+{% block body %}
+<body class="text-center">
+    {% if update %}
+    <div class="alert alert-success" role="alert">
+        <h3>Order Updated Successfuly!</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+    {% if addded %}
+    <div class="alert alert-success" role="alert">
+        <h3>Order added Successfuly!</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+    <div class="container-fluid">
+        <div class="row">
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky text-left">
+                    <h1 class="text-ceter display-5 fw-bold">Operations</h1>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="btn btn-outline-success m-2" href="{% url 'home' %}">
+                                <h3 class="fs-5">
+                                    Home
+                                </h3>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-success m-2" href="#" data-toggle="modal"
+                                data-target="#signupModal">
+                                <h3 class="fs-5">
+                                    Add Order
+                                </h3>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-success m-2" href="#" data-toggle="modal" data-target="#Update">
+                                <h3 class="fs-5">
+                                    Update Order
+                                </h3>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-success m-2" href="" data-toggle="modal" data-target="#Find">
+                                <h3 class="fs-5">
+                                    Find Order
+                                </h3>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-success m-2" href="{% url 'admin' %}">
+                                <h3 class="fs-5">
+                                    Admin LogIn
+                                </h3>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                {% if notFound %}
+                <div class="container p-5">
+                    <div class="alert alert-danger" role="alert">
+                        <h1>No Order With Such ID</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+                {% endif %}
+                {% if status %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Order ID
+                                </th>
+                                <th>
+                                    Customer Name
+                                </th>
+                                <th>
+                                    Order Name
+                                </th>
+                                <th>
+                                    Order Quantity
+                                </th>
+                                <th>
+                                    Order Date
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for o in orders %}
+                            <tr>
+                                <td>
+                                    {{o.id}}
+                                </td>
+                                <td>
+                                    {{o.customer_name}}
+                                </td>
+                                <td>
+                                    {{o.order_name}}
+                                </td>
+                                <td>
+                                    {{o.order_quantity}}
+                                </td>
+                                <td>
+                                    {{o.order_date}}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}
+            </main>
+        </div>
+    </div>
+
+    <!-- Add Order Model -->
+    <div class="modal" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="signupModalLabel">Add New Order</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{% url 'add' %}">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            {{addForm.customer_name}}
+                            {% comment %} <input type="text" class="form-control" name="customer_name" placeholder="Customer Name"
+                                aria-label="Customer_Name" aria-describedby="basic-addon1"> {% endcomment %}
+                            
+                        </div>
+                        <div class="input-group mb-3">
+                            {{addForm.order_name}}
+                            {% comment %} <input type="text" class="form-control" name="order_name" placeholder="Order Name">  {% endcomment %}
+                            <!-- aria-label="Order_Name" aria-describedby="basic-addon1" -->
+                        </div>
+                        <div class="input-group mb-3">
+                            {{addForm.order_quantity}}
+                            {% comment %} <input type="text" class="form-control" name="quantity" placeholder="Order Quantity"
+                                aria-label="Order Quantity" aria-describedby="basic-addon1"> {% endcomment %}
+                        </div>
+                        <button type="submit" class="btn btn-success">Add Order</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Orde Model -->
+    <div class="modal" id="Update" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="signupModalLabel">Update The Order</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{% url 'update' %}">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            {{updateForm.order_id}}
+                            {% comment %} <input type="text" class="form-control" name="id" placeholder="Enter Order ID"
+                                aria-label="Order_ID" aria-describedby="basic-addon1"> {% endcomment %}
+                        </div>
+                        <div class="input-group mb-3">
+                            {{updateForm.customer_name}}
+                            {% comment %} <input type="text" class="form-control" name="customer_name" placeholder="Customer Name"
+                                aria-label="Customer_name" aria-describedby="basic-addon1"> {% endcomment %}
+                        </div>
+                        <div class="input-group mb-3">
+                            {{updateForm.order_name}}
+                            {% comment %} <input type="text" class="form-control" name="order_name" placeholder="Order Name"
+                                aria-label="Order_Name" aria-describedby="basic-addon1"> {% endcomment %}
+                        </div>
+                        <div class="input-group mb-3">
+                            {{updateForm.order_quantity}}
+                            {% comment %} <input type="text" class="form-control" name="quantity" placeholder="Order Quantity"
+                                aria-label="Order Quantity" aria-describedby="basic-addon1"> {% endcomment %}
+                        </div>
+                        <button type="submit" class="btn btn-success">Update Order</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Find Order Model -->
+    <div class="modal" id="Find" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="signupModalLabel">Find the Order</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{% url 'search' %}">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            {{findForm.order_id}}
+                            {% comment %} <input type="text" class="form-control" name="id" placeholder="Enter Order ID"
+                                aria-label="Customer_Name" aria-describedby="basic-addon1"> {% endcomment %}
+                        </div>
+                        <button type="submit" class="btn btn-success">Find</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}

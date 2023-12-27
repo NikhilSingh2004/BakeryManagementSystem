@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}LogIn{% endblock title %}
+
+{% block body %}
+
+    {% if ErrorMessage %}
+
+        <h1 class="display-3 text-center text-danger my-2 fw-bold" id="ErrorMessage">{{ErrorMessage}}</h1>
+
+    {% endif %}
+
+    <div class="container my-5">
+
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <h1 class="display-5 align-text-center">LOG IN</h1>
+            <div class="input-group mb-3">
+                {{logForm.email}}
+            </div>
+            <div class="input-group mb-3">
+                {{logForm.password}}
+            </div>
+            <button type="submit" class="btn btn-success">log In</button>
+        </form>
+
+    </div>
+
+{% endblock body %}
