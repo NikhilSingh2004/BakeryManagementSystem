@@ -83,3 +83,6 @@ Now it's time to run the project!
     There will be some test data!
 
 Now you can expand the project, fix any issues, and customize it as you want!
+
+You are completely free to tune the code as you wish, the project also involve a simple workflow if you want to host the porject on your server!.
+    ewrwer
